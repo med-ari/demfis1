@@ -1,0 +1,1063 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuestionario Integral de Física: Fundamentos de Ondas, Dinámica y Electricidad</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true
+        },
+        svg: {
+          fontCache: 'global'
+        },
+        chtml: {
+          displayAlign: 'left'
+        }
+      };
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #4f46e5; --primary-dark: #4338ca; --primary-light: #eef2ff;
+            --secondary-color: #64748b; --success-color: #10b981; --success-light: #ecfdf5;
+            --danger-color: #ef4444; --danger-light: #fef2f2; --warning-color: #f59e0b;
+            --light-bg: #f1f5f9; --border-color: #cbd5e1; --text-color: #1e293b;
+            --white: #ffffff; --progress-color-start: #4f46e5; --progress-color-end: #10b981;
+        }
+        @keyframes moveGradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        body {
+            font-family: 'Inter', sans-serif; display: flex; justify-content: center;
+            align-items: flex-start; min-height: 100vh;
+            background: linear-gradient(-45deg, #6d28d9, #4f46e5, #d946ef, #10b981);
+            background-size: 400% 400%; animation: moveGradient 20s ease infinite;
+            margin: 0; padding: 2em 1em;
+        }
+        .main-wrapper { width: 100%; max-width: 900px; position: relative; }
+        .card { background: var(--white); padding: 2.5em; border-radius: 16px; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15); animation: fadeIn 0.5s ease-out; }
+        .hidden { display: none; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownFade { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #category-selection-screen h2 { font-size: 2em; color: var(--primary-color); text-align: center; margin-top: 0; margin-bottom: 0.5em; }
+        #category-selection-screen .subtitle { text-align: center; color: var(--secondary-color); margin-bottom: 2em; font-size: 1.1em; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        #category-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5em; margin-bottom: 2.5em; }
+        .category-item { background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; padding: 1.5em; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .category-item:hover:not(.completed) { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(79,70,229,0.1); border-color: var(--primary-color); }
+        .category-item h3 { margin: 0 0 0.5em 0; color: var(--primary-dark); font-size: 1.25em; }
+        .category-item p { margin: 0; color: var(--secondary-color); font-size: 0.95em; line-height: 1.5; }
+        .category-item.completed { border-color: var(--success-color); background-color: var(--success-light); cursor: default; }
+        .category-item.completed:hover { transform: none; box-shadow: none; }
+        .category-item.completed::before { content: '✔'; font-weight: bold; position: absolute; top: 1em; right: 1.2em; color: var(--success-color); font-size: 1.5em; }
+        .category-item .progress-info { margin-top: 1em; font-weight: bold; color: var(--success-color); }
+        #overall-progress-container { margin-top: 2em; text-align: center; border-top: 1px solid var(--border-color); padding-top: 2em;}
+        #overall-progress-container h3 { margin: 0 0 0.5em 0; color: var(--text-color); }
+        #overall-score { font-size: 1.2em; color: var(--secondary-color); }
+        #show-final-results-btn { padding: 12px 30px; font-size: 1em; font-weight: bold; color: var(--white); background-color: var(--success-color); border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; margin-top: 1em; }
+        #show-final-results-btn:hover { background-color: #059669; }
+
+        /* --- New Summary Card Styles --- */
+        #summary-container h2 { font-size: 1.8em; margin-top: 0; margin-bottom: 0.2em; color: var(--primary-color); }
+        #summary-container .subtitle { color: var(--secondary-color); margin-top: 0; margin-bottom: 2em; }
+        .summary-section { margin-bottom: 2.5em; }
+        .summary-section h3 { font-size: 1.2em; font-weight: 700; color: var(--text-color); margin-bottom: 1em; padding-bottom: 0.5em; border-bottom: 2px solid var(--primary-light); display: flex; align-items: center; gap: 0.75em; }
+        .summary-key-concepts { line-height: 1.7; color: #374151; }
+        .summary-key-concepts p, .summary-key-concepts ul, .summary-key-concepts ol { margin-bottom: 1em; }
+        .summary-key-concepts ul, .summary-key-concepts ol { padding-left: 20px; }
+        .summary-key-concepts strong { color: var(--primary-dark); }
+        .summary-key-concepts mjx-container[display="true"] { background-color: rgba(79, 70, 229, 0.05); padding: 1em; border-radius: 8px; margin: 1em 0; }
+        .summary-tips-list { list-style: none; padding: 0; }
+        .summary-tips-list li { display: flex; align-items: flex-start; gap: 1em; margin-bottom: 1em; background-color: var(--primary-light); padding: 1em; border-radius: 8px; }
+        .summary-tips-list li::before { content: '💡'; font-size: 1.2em; line-height: 1.5; }
+        #summary-continue-btn { padding: 12px 30px; font-size: 1em; font-weight: bold; color: var(--white); background-color: var(--primary-color); border: none; border-radius: 10px; cursor: pointer; transition: all 0.2s; display: block; width: 100%; }
+        #summary-continue-btn:hover { background-color: var(--primary-dark); transform: scale(1.02); }
+
+        /* --- Main Quiz & Final Screen Styles --- */
+        #quiz-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5em; }
+        #problem-header { color: var(--text-color); font-weight: 600; font-size: 1.1em; }
+        #score-counter { color: var(--success-color); font-weight: 600; font-size: 1em; background-color: var(--success-light); padding: 5px 10px; border-radius: 8px; }
+        #progress-container { width: 100%; background-color: #e2e8f0; border-radius: 10px; margin-bottom: 1.5em; height: 12px; overflow: hidden; }
+        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--progress-color-start), var(--progress-color-end)); border-radius: 10px; transition: width 0.6s cubic-bezier(0.4, 0.0, 0.2, 1); }
+        #question-container { font-size: 1.15em; line-height: 1.7; margin: 1em 0; color: var(--text-color); text-align: justify; }
+        #question-container table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+        #question-container th, #question-container td { border: 1px solid var(--border-color); padding: 12px; text-align: center; }
+        #question-container th { background-color: var(--light-bg); font-weight: 600; }
+        #graph-container, .option-graph-canvas-container { width: 100%; max-width: 450px; margin: 1.5em auto; border-radius: 8px; overflow: hidden; }
+        #graph-container svg, #graph-container img, .option-graph-canvas-container svg, .option-graph-canvas-container img {max-width: 100%; height: auto; display: block; margin: 0 auto; background: white; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);}
+        #options-container { margin-top: 1.5em; display: flex; flex-direction: column; gap: 0.75em; }
+        .option-button { display: flex; align-items: center; gap: 1em; width: 100%; padding: 14px 18px; font-size: 1.05em; text-align: left; background-color: var(--white); border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s ease-in-out; }
+        .option-button:hover:not(.disabled) { border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .option-button .label { font-weight: bold; color: var(--primary-color); }
+        .option-button .value { flex-grow: 1; }
+        .option-button.correct { border-color: var(--success-color); background-color: var(--success-light); }
+        .option-button.correct .label { color: var(--success-color); }
+        .option-button.incorrect { border-color: var(--danger-color); background-color: var(--danger-light); }
+        .option-button.incorrect .label { color: var(--danger-color); }
+        .option-button.disabled { cursor: not-allowed; }
+        .options-grid-with-graphs { display: grid; grid-template-columns: 1fr 1fr; gap: 1em; }
+        .option-block-graph { padding: 1em; border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; transition: all 0.2s ease-in-out; background-color: var(--white); }
+        .option-block-graph:hover:not(.disabled) { border-color: var(--primary-color); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .option-block-graph.correct { border-color: var(--success-color)!important; background-color: var(--success-light); }
+        .option-block-graph.incorrect { border-color: var(--danger-color)!important; background-color: var(--danger-light); }
+        .option-block-graph .label { font-size: 1.2em; font-weight: bold; margin-bottom: 0.5em; color: var(--primary-color); }
+        
+        #hints-container { margin-top: 1.5em; border-top: 1px dashed var(--border-color); padding-top: 1.5em; display: flex; flex-direction: column; gap: 0.5em; }
+        .hint-button { width: 100%; padding: 10px; background-color: var(--primary-light); border: 1px solid var(--primary-color); color: var(--primary-dark); border-radius: 8px; cursor: pointer; transition: background-color 0.2s; font-weight: 500; }
+        .hint-button:hover { background-color: #dbeafe; }
+        .hint-button:disabled { background-color: #e5e7eb; border-color: var(--border-color); color: var(--secondary-color); cursor: not-allowed; }
+        .hint-content { padding: 12px; background-color: #f3f4f6; border-radius: 8px; font-size: 0.95em; color: var(--text-color); animation: fadeIn 0.3s; }
+
+        #feedback-container { margin-top: 1.5em; padding: 1.2em; border-radius: 12px; display: none; animation: slideDownFade 0.4s ease-out; line-height: 1.7; text-align: justify; }
+        #feedback-container.correct { background-color: var(--success-light); border-left: 5px solid var(--success-color); }
+        #feedback-container.incorrect { background-color: var(--danger-light); border-left: 5px solid var(--danger-color); }
+        #feedback-title { display: flex; align-items: center; font-size: 1.2em; font-weight: 700; margin-bottom: 0.5em; }
+        #feedback-title svg { width: 24px; height: 24px; margin-right: 8px; }
+        #feedback-container.correct #feedback-title { color: var(--success-color); }
+        #feedback-container.incorrect #feedback-title { color: var(--danger-color); }
+        #navigation-container { display: flex; justify-content: flex-end; margin-top: 2em; }
+        #next-button, .nav-btn { padding: 12px 30px; font-size: 1em; font-weight: bold; color: var(--white); background-color: var(--primary-color); border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; }
+        #next-button { visibility: hidden; opacity: 0; }
+        #next-button.visible { visibility: visible; opacity: 1; }
+        #next-button:hover, .nav-btn:hover { background-color: var(--primary-dark); }
+        #final-screen { text-align: center; animation: fadeIn 0.5s ease-out; }
+        #final-screen h2 { font-size: 2.2em; color: var(--primary-color); font-weight: 700; }
+        #final-screen p { font-size: 1.2em; }
+        .highlight { color: var(--primary-color); font-weight: 700; }
+        @media (max-width: 680px) { .options-grid-with-graphs { grid-template-columns: 1fr; } #category-list { grid-template-columns: 1fr; }}
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div id="category-selection-screen" class="card">
+            <h2>Cuestionario Integral de Física: Fundamentos de Ondas, Dinámica y Electricidad</h2>
+            <p class="subtitle">Selecciona un tema para comenzar. Cada sección se enfoca en una habilidad clave. ¡Completa todas las secciones para demostrar tu maestría!</p>
+            <ul id="category-list"></ul>
+            <div id="overall-progress-container" class="hidden">
+                <h3>Progreso General</h3>
+                <p id="overall-score"></p>
+                <button id="show-final-results-btn" class="nav-btn hidden">Ver Resumen Final</button>
+            </div>
+        </div>
+
+        <div id="quiz-wrapper" class="hidden">
+            <div id="summary-container" class="card hidden">
+                <h2 id="summary-title"></h2>
+                <p class="subtitle">Prepárate para la siguiente sección.</p>
+
+                <div class="summary-section">
+                    <h3>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open" style="color: var(--primary-dark);"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                      Conceptos Clave y Fórmulas
+                    </h3>
+                    <div id="summary-key-concepts" class="summary-key-concepts"></div>
+                </div>
+                
+                <div class="summary-section">
+                    <h3>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-zap" style="color: var(--warning-color);"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                      Consejos para esta Sección
+                    </h3>
+                    <ul id="summary-tips-list" class="summary-tips-list"></ul>
+                </div>
+                
+                <button id="summary-continue-btn">Comenzar Problemas</button>
+            </div>
+
+            <div id="quiz-container" class="hidden card">
+                <div id="progress-container"><div id="progress-bar"></div></div>
+                <div id="quiz-header-bar">
+                    <div id="problem-header"></div>
+                    <div id="score-counter"></div>
+                </div>
+                <div id="question-container"></div>
+                <div id="graph-container"></div>
+                <div id="options-container"></div>
+                <div id="hints-container"></div>
+                <div id="feedback-container"></div>
+                <div id="navigation-container"><button id="next-button">Siguiente →</button></div>
+            </div>
+
+            <div id="final-screen" class="hidden card">
+                <h2 id="final-title"></h2>
+                <p id="final-message"></p>
+                <p id="final-score" style="font-size: 2.5em; font-weight: bold; margin: 0.5em 0;"></p>
+                <p id="final-percentage" style="font-size: 1.5em;"></p>
+                <button id="back-to-menu-btn" class="nav-btn">Volver al Menú</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function renderMath() {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        setTimeout(() => window.MathJax.typesetPromise(), 0);
+      }
+    }
+
+    function renderDiagram(diagram) {
+        if (!diagram) return '';
+        if (diagram.type === 'raster') {
+            return `<img src="${diagram.src}" alt="Diagrama" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: white; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1;" />`;
+        }
+        return '';
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        const icons = {
+            check: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>`,
+            x: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`
+        };
+        const summaries = {
+  "ai-cat-1760898169788-0": {
+    "title": "Ondas Electromagnéticas y Óptica",
+    "key_concepts_html": "<p>Esta sección explora las propiedades y comportamientos de las ondas electromagnéticas, con un enfoque particular en la luz visible. Los conceptos clave incluyen:</p><ul><li><strong>Reflexión y Refracción:</strong> Fenómenos donde la luz cambia de dirección al chocar con una superficie o al pasar de un medio a otro. Recuerda que la <strong>frecuencia</strong> (que determina el color) de una onda de luz <em>no cambia</em> al reflejarse o refractarse. Lo que sí cambia son su <strong>velocidad</strong> (\n\\(v\\)\n) y su <strong>longitud de onda</strong> (\n\\(\\lambda\\)\n).</li><li><strong>Índice de Refracción (\n\\(n\\)\n):</strong> Es una medida de cuánto se reduce la velocidad de la luz en un medio en comparación con su velocidad en el vacío (\n\\(c\\)\n). Se define como \n\\(n = c/v\\)\n.</li><li><strong>Relaciones Fundamentales de Onda:</strong> La velocidad de una onda (\n\\(v\\)\n) se relaciona con su longitud de onda (\n\\(\\lambda\\)\n) y su frecuencia (\n\\(f\\)\n) mediante la ecuación \n\\(v = \\lambda f\\)\n. El período (\n\\(T\\)\n) es el inverso de la frecuencia: \n\\(T = 1/f\\)\n.</li><li><strong>Espectro Electromagnético:</strong> La luz se clasifica por su frecuencia (o longitud de onda). El color percibido de la luz visible está directamente relacionado con su frecuencia.</li><li><strong>Blindaje Electromagnético:</strong> Capacidad de un material para bloquear o atenuar la propagación de ondas electromagnéticas, protegiendo un área de la radiación externa.</li></ul>",
+    "tips": [
+      "Presta atención a los detalles en los enunciados y diagramas.",
+      "Recuerda revisar las fórmulas y conceptos clave relacionados antes de empezar.",
+      "Usa la explicación para entender tus errores y reforzar tu aprendizaje.",
+      "¡Mucha suerte en esta sección!"
+    ]
+  },
+  "ai-cat-1760898169788-1": {
+    "title": "Dinámica y Fuerzas",
+    "key_concepts_html": "<p>Esta categoría se centra en las Leyes de Newton y los diferentes tipos de fuerzas que afectan el movimiento de los objetos.</p><ul><li><strong>Tercera Ley de Newton (Acción y Reacción):</strong> Establece que por cada acción, hay una reacción igual y opuesta. Cuando un cuerpo \n\\(A\\)\n ejerce una fuerza sobre un cuerpo \n\\(B\\)\n (\n\\(\\vec{F}_{AB}\\)\n), el cuerpo \n\\(B\\)\n ejerce una fuerza de igual magnitud y dirección opuesta sobre el cuerpo \n\\(A\\)\n (\n\\(\\vec{F}_{BA} = -\\vec{F}_{AB}\\)\n).</li><li><strong>Fuerza de Roce:</strong> Es una fuerza que se opone al movimiento relativo entre dos superficies en contacto.<ul><li><strong>Roce Estático (\n\\(f_s\\)\n):</strong> Actúa cuando el objeto está en reposo y se le aplica una fuerza. Es una fuerza variable que se ajusta para igualar la fuerza aplicada hasta un valor máximo (\n\\(f_{s,\\text{max}} = \\mu_s N\\)\n), donde \n\\(\\mu_s\\)\n es el coeficiente de roce estático y \n\\(N\\)\n es la fuerza normal.</li><li><strong>Roce Cinético (\n\\(f_k\\)\n):</strong> Actúa cuando el objeto está en movimiento. Su valor es aproximadamente constante y se calcula como \n\\(f_k = \\mu_k N\\)\n, donde \n\\(\\mu_k\\)\n es el coeficiente de roce cinético (\n\\(\\mu_k < \\mu_s\\)\n).</li></ul></li><li><strong>Fuerza Normal (\n\\(N\\)\n):</strong> Es la fuerza de contacto que una superficie ejerce sobre un objeto perpendicularmente a la superficie, oponiéndose al peso si la superficie es horizontal.</li></ul>",
+    "tips": [
+      "Presta atención a los detalles en los enunciados y diagramas.",
+      "Recuerda revisar las fórmulas y conceptos clave relacionados antes de empezar.",
+      "Usa la explicación para entender tus errores y reforzar tu aprendizaje.",
+      "¡Mucha suerte en esta sección!"
+    ]
+  },
+  "ai-cat-1760898169788-2": {
+    "title": "Metodología Científica y Experimentación",
+    "key_concepts_html": "<p>Esta categoría aborda los principios fundamentales del método científico y el diseño experimental, esenciales para la investigación en cualquier disciplina.</p><ul><li><strong>Componentes de una Investigación Científica:</strong><ul><li><strong>Hipótesis:</strong> Una suposición o explicación tentativa que puede ser probada experimentalmente.</li><li><strong>Procedimiento:</strong> La serie de pasos detallados para llevar a cabo un experimento.</li><li><strong>Variables:</strong> Factores que pueden cambiar en un experimento.</li><ul><li><strong>Variable Independiente:</strong> La que el experimentador manipula o cambia.</li><li><strong>Variable Dependiente:</strong> La que se mide y se espera que cambie en respuesta a la variable independiente.</li><li><strong>Variable Controlada:</strong> Factores que se mantienen constantes para asegurar que solo la variable independiente afecte la dependiente.</li></ul><li><strong>Inferencia:</strong> Una conclusión lógica basada en la evidencia observada, a menudo una descripción de una tendencia o patrón en los datos.</li><li><strong>Conclusión:</strong> La interpretación final de los resultados del experimento, que confirma, refuta o modifica la hipótesis inicial y a menudo generaliza los hallazgos.</li><li><strong>Ley:</strong> Una descripción de un fenómeno observado en la naturaleza que siempre se cumple bajo ciertas condiciones, a menudo expresada matemáticamente (ej., \n\\(F=ma\\)\n).</li><li><strong>Teoría:</strong> Una explicación bien fundamentada de algún aspecto del mundo natural, basada en un cuerpo de hechos que han sido repetidamente confirmados a través de la observación y la experimentación.</li></ul></li><li><strong>Diseño Experimental:</strong> Debe ser capaz de probar una hipótesis controlando las variables para aislar el efecto de la variable independiente sobre la dependiente.</li></ul>",
+    "tips": [
+      "Presta atención a los detalles en los enunciados y diagramas.",
+      "Recuerda revisar las fórmulas y conceptos clave relacionados antes de empezar.",
+      "Usa la explicación para entender tus errores y reforzar tu aprendizaje.",
+      "¡Mucha suerte en esta sección!"
+    ]
+  },
+  "ai-cat-1760898169788-3": {
+    "title": "Circuitos Eléctricos",
+    "key_concepts_html": "<p>Esta categoría explora los principios básicos de los circuitos eléctricos, incluyendo la Ley de Ohm y las características de las conexiones en serie y paralelo.</p><ul><li><strong>Ley de Ohm:</strong> Relaciona la diferencia de potencial (\n\\(V\\)\n, o voltaje), la intensidad de corriente eléctrica (\n\\(I\\)\n) y la resistencia eléctrica (\n\\(R\\)\n) en un circuito. La fórmula es \n\\(V = IR\\)\n.</li><li><strong>Circuitos en Paralelo:</strong> Una configuración donde los componentes están conectados a través de los mismos dos puntos, de modo que la diferencia de potencial (\n\\(V\\)\n) es la misma para todos los componentes. La corriente total (\n\\(I_{\\text{total}}\n\\)) se divide entre las ramas del circuito (\n\\(I_{\\text{total}} = I_1 + I_2 + ...\\)\n).</li><li><strong>Circuitos en Serie:</strong> Una configuración donde los componentes están conectados uno tras otro, de modo que la intensidad de corriente (\n\\(I\\)\n) es la misma a través de todos los componentes. La diferencia de potencial total (\n\\(V_{\\text{total}}\n\\)) es la suma de las diferencias de potencial en cada componente (\n\\(V_{\\text{total}} = V_1 + V_2 + ...\\)\n).</li><li><strong>Variables en la Investigación de Circuitos:</strong> La intensidad de corriente, el voltaje, la resistencia y el tiempo son variables comunes a medir o controlar en experimentos eléctricos.</li></ul>",
+    "tips": [
+      "Presta atención a los detalles en los enunciados y diagramas.",
+      "Recuerda revisar las fórmulas y conceptos clave relacionados antes de empezar.",
+      "Usa la explicación para entender tus errores y reforzar tu aprendizaje.",
+      "¡Mucha suerte en esta sección!"
+    ]
+  }
+};
+        const allProblemsData = [
+  {
+    "text": "Un grupo de estudiantes hace incidir un rayo luminoso desde el aire hacia el vidrio y mide la frecuencia del rayo incidente, reflejado y refractado. A partir de lo anterior, ¿cuál de los siguientes objetivos de investigación se relaciona directamente con el procedimiento realizado?",
+    "options": [
+      {
+        "text": "Comprobar si en el instante de la incidencia hay reflexión y refracción simultáneamente."
+      },
+      {
+        "text": "Comprobar si en el instante de la incidencia hay absorción de color del rayo incidente."
+      },
+      {
+        "text": "Comprobar si los rayos incidente, reflejado y refractado, están en el mismo plano."
+      },
+      {
+        "text": "Comprobar si los rayos incidente, reflejado y refractado, tienen el mismo color."
+      }
+    ],
+    "correct": 3,
+    "explanation": "La frecuencia de una onda electromagnética, como la luz, es una propiedad intrínseca que no cambia cuando la onda se refleja o se refracta al pasar de un medio a otro. Dado que la frecuencia de la luz determina el color que percibimos, medir la frecuencia de los rayos incidente, reflejado y refractado permite determinar si el color se conserva durante estos fenómenos ópticos.",
+    "hints": [
+      "¿Qué propiedad de la luz está directamente relacionada con su color percibido?",
+      "Al pasar la luz de un medio a otro (o al reflejarse), ¿qué sucede con su frecuencia, su velocidad y su longitud de onda? ¿Cuál de estas propiedades permanece constante?",
+      "Si la medición se enfoca en la `frecuencia`, y la `frecuencia` determina el `color`, ¿qué se intenta comprobar sobre el color de los rayos?"
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "1",
+    "internalId": "q-1760898169788-0.23414474229045512",
+    "diagram": {
+      "type": "raster",
+      "src": "images/1760899033291-w0etx6zieg-Screenshot_20251019_152733.png",
+      "filename": "Screenshot_20251019_152733.png"
+    },
+    "id": "q-ai-cat-1760898169788-0-0"
+  },
+  {
+    "text": "Un grupo de estudiantes encuentra la siguiente información sobre las características de dos tipos de luz LED con sus respectivos colores, representados en espectros de intensidad relativa vs. longitud de onda. A partir del análisis de los gráficos, ¿cuál de las siguientes conclusiones es correcta?",
+    "options": [
+      {
+        "text": "La intensidad relativa para longitudes de onda de \n\\(550 \\,\\text{nm}\\)\n es mayor en luces LED de mayor temperatura."
+      },
+      {
+        "text": "La intensidad relativa para longitudes de onda de \n\\(450 \\,\\text{nm}\\)\n es menor en luces LED de menor temperatura."
+      },
+      {
+        "text": "La intensidad relativa es directamente proporcional a la longitud de onda en ambos tipos de luz LED."
+      },
+      {
+        "text": "La intensidad relativa de la luz determina la temperatura y el color de la luz LED."
+      }
+    ],
+    "correct": 1,
+    "explanation": "Al analizar los gráficos, se observa que para una longitud de onda de \n\\(450 \\,\\text{nm}\\)\n, la luz LED de \n\\(5000 \\,\\text{K}\\)\n (mayor temperatura) tiene una intensidad relativa de \n\\(1.0\\)\n, mientras que la luz LED de \n\\(3000 \\,\\text{K}\\)\n (menor temperatura) tiene una intensidad relativa cercana a \n\\(0.1\\)\n. Por lo tanto, la intensidad relativa a \n\\(450 \\,\\text{nm}\\)\n es menor en las luces LED de menor temperatura, lo que hace que la opción B sea correcta.",
+    "hints": [
+      "¿Cómo se representan la 'temperatura' y la 'intensidad' en cada gráfico para un punto específico de la longitud de onda?",
+      "Para verificar cada opción, localiza las longitudes de onda mencionadas (\n\\(450 \\,\\text{nm}\\)\n y \n\\(550 \\,\\text{nm}\\)\n) en ambos gráficos y compara sus valores de intensidad relativa. ¿Qué observas?",
+      "Concéntrate en la opción B: ¿Cuál es la intensidad a \n\\(450 \\,\\text{nm}\\)\n para la luz de \n\\(5000 \\,\\text{K}\\)\n y para la luz de \n\\(3000 \\,\\text{K}\\)\n? ¿Es la intensidad menor en el caso de menor temperatura?"
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "3",
+    "internalId": "q-1760898169788-0.27988308433881026",
+    "diagram": {
+      "type": "raster",
+      "src": "images/1760899033292-36q04rfnh5c-Screenshot_20251019_152801.png",
+      "filename": "Screenshot_20251019_152801.png"
+    },
+    "id": "q-ai-cat-1760898169788-0-1"
+  },
+  {
+    "text": "Cuatro jóvenes se encuentran estudiando el perfil de tres ondas electromagnéticas (onda X, Y y Z) que se propagan en un mismo medio, graficados todos a una misma escala. Onda X completa aproximadamente \n\\(4\\)\n ciclos en \n\\(5\\)\n segundos. Onda Y completa \n\\(1\\)\n ciclo en \n\\(4\\)\n segundos. Onda Z completa \n\\(2\\)\n ciclos en \n\\(4\\)\n segundos. Considerando el análisis de los perfiles de las ondas X, Y y Z, ¿cuál de las siguientes conclusiones es correcta?",
+    "options": [
+      {
+        "text": "El período de las ondas X, Y y Z es el mismo."
+      },
+      {
+        "text": "La longitud de onda de las ondas X, Y y Z es la misma."
+      },
+      {
+        "text": "La velocidad de la onda Y es mayor que la velocidad de la onda Z."
+      },
+      {
+        "text": "La frecuencia de la onda X es mayor que la frecuencia de la onda Z."
+      }
+    ],
+    "correct": 3,
+    "explanation": "El período (\n\\(T\\)\n) de la onda Y es \n\\(4 \\,\\text{s}\\)\n (1 ciclo en 4s), el de la onda Z es \n\\(2 \\,\\text{s}\\)\n (2 ciclos en 4s, \n\\(4/2 = 2\\)\ns/ciclo) y el de la onda X es \n\\(1.25 \\,\\text{s}\\)\n (4 ciclos en 5s, \n\\(5/4 = 1.25\\)\ns/ciclo). Por lo tanto, los períodos son diferentes (opción A incorrecta). Dado que se propagan en el mismo medio, sus velocidades son idénticas (opción C incorrecta). La longitud de onda depende de la frecuencia, que es diferente, así que \n\\(\\lambda\\)\n no es la misma (opción B incorrecta). La frecuencia (\n\\(f = 1/T\\)\n) de la onda Z es \n\\(1/2 = 0.5 \\,\\text{Hz}\\)\n y la de la onda X es \n\\(1/1.25 = 0.8 \\,\\text{Hz}\\)\n. Como \n\\(0.8 \\,\\text{Hz} > 0.5 \\,\\text{Hz}\\)\n, la frecuencia de la onda X es mayor que la de la onda Z (opción D correcta).",
+    "hints": [
+      "¿Cómo se calculan el período (\n\\(T\\)\n) y la frecuencia (\n\\(f\\)\n) a partir del número de ciclos y el tiempo total? Recuerda que \n\\(f = 1/T\\)\n.",
+      "Si las ondas se propagan en el 'mismo medio', ¿qué implica esto para su velocidad de propagación?",
+      "Calcula la frecuencia de la onda X y la frecuencia de la onda Z. Luego, compáralas directamente."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "4",
+    "internalId": "q-1760898169788-0.013192178329912041",
+    "diagram": {
+      "type": "raster",
+      "src": "images/1760899033292-8n9sgvh82v-Screenshot_20251019_153141.png",
+      "filename": "Screenshot_20251019_153141.png"
+    },
+    "id": "q-ai-cat-1760898169788-0-2"
+  },
+  {
+    "text": "El radar es un instrumento tecnológico que se utiliza ampliamente en el ámbito de la aeronáutica, navegación, meteorología y otras actividades, ya que permite determinar la posición de objetos así como sus velocidades y trayectorias. En relación a lo anterior, ¿qué fenómenos asociados a las ondas electromagnéticas explican el funcionamiento del radar?",
+    "options": [
+      {
+        "text": "La difracción y la absorción."
+      },
+      {
+        "text": "La refracción y la absorción."
+      },
+      {
+        "text": "La propagación y la difracción."
+      },
+      {
+        "text": "La propagación y la reflexión."
+      }
+    ],
+    "correct": 3,
+    "explanation": "El funcionamiento del radar se basa en la emisión de ondas electromagnéticas (propagación) que viajan por el espacio hasta encontrar un objeto. Al chocar con el objeto, una parte de esas ondas \"rebota\" y regresa al detector del radar (reflexión). La medición del tiempo que tarda la onda en ir y volver, junto con su dirección, permite calcular la distancia y la posición del objeto. Los fenómenos esenciales son la propagación y la reflexión.",
+    "hints": [
+      "Piensa en el proceso fundamental de un radar: ¿qué hace con las ondas electromagnéticas y qué fenómeno ocurre cuando estas ondas interactúan con un objeto?",
+      "El radar envía una señal. ¿Cómo se describe el viaje de una onda a través de un medio? Luego, la señal 'rebota' en un objeto. ¿Cómo se llama este fenómeno de rebote?",
+      "Las ondas del radar deben salir de la antena y luego regresar a ella. Identifica las acciones físicas asociadas con 'salir' y con 'regresar'."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "5",
+    "internalId": "q-1760898169788-0.22646840804636015",
+    "id": "q-ai-cat-1760898169788-0-3"
+  },
+  {
+    "text": "Un haz de luz monocromática de frecuencia \n\\(6 \\times 10^{14}\\,\\text{Hz}\\)\n y longitud de onda \n\\(5 \\times 10^{-7}\\,\\text{m}\\)\n, se propaga en el vacío. El haz pasa desde el vacío a un medio cuyo índice de refracción es \n\\(2\\)\n. En este segundo medio, el haz tiene:",
+    "options": [
+      {
+        "text": "2,5 x \n\\(10^{-7}\\)\n | 3 \n\\(\\times\\)\n \n\\(10^8\\)\n"
+      },
+      {
+        "text": "2,5 x \n\\(10^{-7}\\)\n | 1,5 \n\\(\\times\\)\n \n\\(10^8\\)\n"
+      },
+      {
+        "text": "5 x \n\\(10^{-7}\\)\n | 1,5 \n\\(\\times\\)\n \n\\(10^8\\)\n"
+      },
+      {
+        "text": "1 x \n\\(10^{-6}\\)\n | 3 \n\\(\\times\\)\n \n\\(10^8\\)\n"
+      },
+      {
+        "text": "1 \n\\(\\times\\)\n \n\\(10^{-6}\\)\n | 1,5 x \n\\(10^8\\)\n"
+      }
+    ],
+    "correct": 1,
+    "explanation": "Cuando un haz de luz pasa de un medio a otro, su frecuencia (\n\\(f\\)\n) permanece constante, por lo que en el nuevo medio \n\\(f = 6 \\times 10^{14}\\,\\text{Hz}\\)\n. La rapidez (\n\\(v\\)\n) en el nuevo medio se calcula usando el índice de refracción (\n\\(n\\)\n) como \n\\(v = c/n\\)\n, donde \n\\(c = 3 \\times 10^8\\,\\text{m/s}\\)\n es la velocidad de la luz en el vacío. Así, \n\\(v = (3 \\times 10^8\\,\\text{m/s}) / 2 = 1.5 \\times 10^8\\,\\text{m/s}\\)\n. Finalmente, la nueva longitud de onda (\n\\(\\lambda\\)\n) se obtiene de \n\\(\\lambda = v/f = (1.5 \\times 10^8\\,\\text{m/s}) / (6 \\times 10^{14}\\,\\text{Hz}) = 0.25 \\times 10^{-6}\\,\\text{m} = 2.5 \\times 10^{-7}\\,\\text{m}\\)\n.",
+    "hints": [
+      "¿Cuál de las propiedades de una onda (frecuencia, longitud de onda, velocidad) se mantiene constante cuando pasa de un medio a otro?",
+      "Recuerda la definición del índice de refracción (\n\\(n\\)\n) y la ecuación de onda. ¿Cómo se relacionan la velocidad de la luz en el vacío (\n\\(c\\)\n), la velocidad en el medio (\n\\(v\\)\n) y el índice de refracción?",
+      "Usa la fórmula \n\\(v = c/n\\)\n para encontrar la nueva velocidad. Luego, con la frecuencia conocida y la nueva velocidad, utiliza \n\\(\\lambda = v/f\\)\n para encontrar la nueva longitud de onda."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "6",
+    "internalId": "q-1760898169788-0.7552238809821135",
+    "id": "q-ai-cat-1760898169788-0-4"
+  },
+  {
+    "text": "Durante una actividad experimental, una estudiante fija un globo desinflado a los bordes de un plato hondo, simulando una cama elástica. Luego deja caer una canica sobre el globo tenso, observando que el globo se hunde levemente y que la canica rebota. Al respecto, ¿cuál de los siguientes hechos explica correctamente lo observado por la estudiante?",
+    "options": [
+      {
+        "text": "La fuerza que la canica ejerce sobre el globo es proporcional a la altura desde donde se suelta la canica."
+      },
+      {
+        "text": "La fuerza que ejerce la canica sobre el globo depende de cuán tenso esté el globo en la superficie del plato."
+      },
+      {
+        "text": "La canica ejerce una fuerza sobre el globo en sentido contrario a la fuerza que el globo ejerce sobre la misma."
+      },
+      {
+        "text": "La altura que alcanza la canica luego de rebotar sobre el globo se relaciona directamente con la tensión que el globo tiene en el plato."
+      }
+    ],
+    "correct": 2,
+    "explanation": "El fenómeno del rebote de la canica sobre el globo es una clara manifestación de la Tercera Ley de Newton, el principio de acción y reacción. Cuando la canica ejerce una fuerza sobre el globo (acción), el globo elástico ejerce una fuerza de igual magnitud y en dirección opuesta sobre la canica (reacción), lo que provoca que esta última sea impulsada hacia arriba y rebote. Las otras opciones describen factores que influyen en la interacción o sus consecuencias, pero no el principio fundamental que explica la interacción misma.",
+    "hints": [
+      "¿Qué ley fundamental de la física describe la interacción entre dos objetos cuando uno ejerce una fuerza sobre el otro?",
+      "Piensa en el par de fuerzas involucradas: la canica empuja el globo y el globo empuja la canica. ¿Cómo se relacionan estas dos fuerzas según la física?",
+      "El rebote es el resultado directo de una fuerza que el globo ejerce sobre la canica. ¿Cómo se compara esta fuerza con la que la canica ejerce sobre el globo?"
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "7",
+    "internalId": "q-1760898169788-0.32972137125471357",
+    "id": "q-ai-cat-1760898169788-1-0"
+  },
+  {
+    "text": "A un bloque que se encuentra inicialmente en reposo sobre una superficie horizontal rugosa se le aplica una fuerza de manera horizontal variable. El gráfico I muestra cómo varía la fuerza de roce en función de la fuerza aplicada, por otra parte el gráfico II muestra cómo varía su rapidez mientras se le aplica dicha fuerza. En relación con el análisis de los gráficos, ¿cuál de las siguientes opciones es una conclusión correcta respecto al movimiento del bloque?",
+    "options": [
+      {
+        "text": "Entre P y Q, el cuerpo se encuentra en reposo dado que la fuerza aplicada tiene la misma magnitud que la fuerza de roce."
+      },
+      {
+        "text": "Entre Q y R, el cuerpo se encuentra en reposo dado que la fuerza de roce es siempre la misma."
+      },
+      {
+        "text": "Entre Q y R, el cuerpo se encuentra en movimiento bajo roce estático dado que la fuerza de roce es siempre la misma."
+      },
+      {
+        "text": "Entre P y Q, el cuerpo se encuentra en movimiento bajo roce cinético dado que, a medida que aumenta la fuerza aplicada, aumenta también la fuerza de roce."
+      }
+    ],
+    "correct": 0,
+    "explanation": "Analizando el Gráfico II, entre los puntos P y Q la rapidez del bloque es cero, lo que significa que el bloque está en reposo. Durante este intervalo, según el Gráfico I, la fuerza de roce es igual a la fuerza aplicada. Esta es la característica principal de la fuerza de roce estático: se ajusta para oponerse exactamente a la fuerza aplicada, manteniendo el objeto en reposo, hasta alcanzar un valor máximo. Por lo tanto, la opción A es correcta. Entre Q y R, el Gráfico II muestra que el bloque tiene rapidez y esta aumenta, indicando movimiento, y el Gráfico I muestra que la fuerza de roce es constante, lo cual es típico del roce cinético.",
+    "hints": [
+      "Utiliza el Gráfico II (rapidez vs. fuerza aplicada) para determinar si el bloque está en reposo o en movimiento en los intervalos P-Q y Q-R.",
+      "Una vez que sabes si el bloque se mueve o no, usa el Gráfico I (fuerza de roce vs. fuerza aplicada) para identificar qué tipo de roce (estático o cinético) está actuando. ¿Qué sucede con la fuerza de roce cuando el objeto está en reposo y se le aplica una fuerza creciente?",
+      "Recuerda que el roce estático es variable e iguala la fuerza aplicada cuando el objeto no se mueve. El roce cinético es constante y actúa cuando el objeto está en movimiento."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "8",
+    "internalId": "q-1760898169788-0.732367693238809",
+    "diagram": {
+      "type": "raster",
+      "src": "images/1760899033292-gai5qh9bkld-Screenshot_20251019_153241.png",
+      "filename": "Screenshot_20251019_153241.png"
+    },
+    "id": "q-ai-cat-1760898169788-1-1"
+  },
+  {
+    "text": "Un grupo de estudiantes arrastra dos bloques con rapidez constante, por una superficie horizontal. Luego, repite el procedimiento, pero superponiendo el bloque 2 sobre el bloque 1. Finalmente, comparan los resultados observando que existe una diferencia despreciable. En su informe, los estudiantes señalan que “la magnitud de la fuerza de roce es independiente del área de contacto entre los bloques y la superficie\". Al respecto, ¿a qué componente de la investigación científica corresponde lo señalado por el grupo de estudiantes en su informe?",
+    "options": [
+      {
+        "text": "A un marco conceptual."
+      },
+      {
+        "text": "A un procedimiento."
+      },
+      {
+        "text": "A una conclusión."
+      },
+      {
+        "text": "A una predicción."
+      }
+    ],
+    "correct": 2,
+    "explanation": "El enunciado 'la magnitud de la fuerza de roce es independiente del área de contacto entre los bloques y la superficie' es una interpretación generalizada de los resultados obtenidos en el experimento. Después de realizar el procedimiento y observar una diferencia despreciable en los resultados, los estudiantes formulan esta afirmación como una lección aprendida o un hallazgo principal. Esto corresponde a una conclusión en el método científico, donde se resumen y se discuten los hallazgos.",
+    "hints": [
+      "¿Es la frase 'la magnitud de la fuerza de roce es independiente del área de contacto' lo que los estudiantes *hicieron*, lo que *observaron directamente* o lo que *interpretaron* a partir de sus observaciones?",
+      "Piensa en la secuencia del método científico: primero se plantea una pregunta/hipótesis, luego se diseña un procedimiento, se obtienen resultados y, finalmente, se llega a una... ¿qué?",
+      "Una **conclusión** es una afirmación que se deriva de los resultados de un experimento, generalizando un patrón o relación observada."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "9",
+    "internalId": "q-1760898169788-0.4795688456304372",
+    "diagram": {
+      "type": "raster",
+      "src": "images/1760899033292-tgta4q9auo-Screenshot_20251019_153337.png",
+      "filename": "Screenshot_20251019_153337.png"
+    },
+    "id": "q-ai-cat-1760898169788-2-0"
+  },
+  {
+    "text": "Una persona plantea que la magnitud de la fuerza transmitida por una cuerda depende del lugar de la cuerda donde esta fuerza se mida. Para probar su hipótesis, cuelga del techo un bloque grande (\n\\(M_1\\)\n), del cual se cuelgan otros dos bloques pequeños (\n\\(M_2\\)\n, \n\\(M_3\\)\n), utilizando tres trozos de cuerda, como se muestra en una imagen (cuerda 1 cuelga \n\\(M_1\\)\n del techo; cuerda 2 cuelga \n\\(M_2\\)\n de \n\\(M_1\\)\n; cuerda 3 cuelga \n\\(M_3\\)\n de \n\\(M_1\\)\n). Para probar su hipótesis, la persona va a intercalar un mismo dinamómetro en el sistema en dos ocasiones, ¿dónde debe intercalar el dinamómetro en cada ocasión?",
+    "options": [
+      {
+        "text": "Primero en la unión del techo con la cuerda 1 y luego, en la unión de la cuerda 3 con el bloque pequeño."
+      },
+      {
+        "text": "Primero en la unión de la cuerda 2 con el bloque grande y luego, en la unión de la cuerda 2 con el bloque pequeño."
+      },
+      {
+        "text": "Primero en la unión de la cuerda 3 con el bloque grande y luego, en la unión de la cuerda 2 con el bloque grande."
+      },
+      {
+        "text": "Primero en la unión de la cuerda 1 con el bloque grande y luego, nuevamente en la unión de la cuerda 1 con el bloque grande."
+      }
+    ],
+    "correct": 1,
+    "explanation": "La hipótesis que se quiere probar es si la fuerza (tensión) en una cuerda depende del lugar donde se mida. Para probar esto correctamente, se debe medir la tensión en dos puntos diferentes de *la misma cuerda*, manteniendo las demás condiciones constantes. La opción B propone medir la tensión en la cuerda 2, primero en su unión con el bloque grande (\n\\(M_1\\)\n, parte superior de la cuerda 2) y luego en su unión con el bloque pequeño (\n\\(M_2\\)\n, parte inferior de la cuerda 2). De esta manera, se compara la tensión en dos puntos de la misma cuerda que soporta el mismo peso, lo que permite verificar la hipótesis de forma controlada.",
+    "hints": [
+      "¿Cuál es la **hipótesis** que la persona quiere probar? Es crucial entender qué variable se quiere investigar.",
+      "Para probar si la fuerza *depende del lugar de la cuerda*, necesitas medir en **la misma cuerda** pero en **diferentes puntos** de ella. ¿Qué opciones cumplen esta condición?",
+      "Elimina las opciones que comparan cuerdas diferentes (que ya se sabe que tienen diferentes tensiones porque soportan diferentes pesos) o que miden en el mismo lugar. Busca la opción que te permita ver si la tensión cambia *a lo largo* de una sola cuerda."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "10",
+    "internalId": "q-1760898169788-0.23120048989730935",
+    "diagram": {
+      "type": "raster",
+      "src": "images/1760899033292-ho8xz0jvxd-Screenshot_20251019_153411.png",
+      "filename": "Screenshot_20251019_153411.png"
+    },
+    "id": "q-ai-cat-1760898169788-2-1"
+  },
+  {
+    "text": "Una persona empuja una caja que contiene \n\\(10 \\,\\text{kg}\\)\n de manzanas por una superficie horizontal de cemento con velocidad constante. Luego, la persona vuelve a empujar la caja con velocidad constante, pero ahora con \n\\(8 \\,\\text{kg}\\)\n de manzanas. ¿Cuál de las opciones corresponde a una variable controlada en su procedimiento?",
+    "options": [
+      {
+        "text": "El coeficiente de roce entre la caja y la superficie."
+      },
+      {
+        "text": "La fuerza ejercida sobre la caja por la persona."
+      },
+      {
+        "text": "El peso sobre la caja y su contenido."
+      },
+      {
+        "text": "La masa de la caja y su contenido."
+      }
+    ],
+    "correct": 0,
+    "explanation": "Una variable controlada es aquella que se mantiene constante a propósito para aislar el efecto de la variable independiente. En este experimento, la masa de las manzanas (y por lo tanto la masa y el peso total del sistema) es la variable que se cambia (variable independiente). La fuerza ejercida por la persona y la fuerza de roce cinético cambiarán porque el peso total y, consecuentemente, la fuerza normal cambian (\n\\(F_{\\text{roce}} = \\mu_k N\\)\n). Sin embargo, el coeficiente de roce cinético (\n\\(\\mu_k\\)\n) depende solo de la naturaleza de las superficies en contacto (caja y cemento), las cuales no se modifican. Por lo tanto, el coeficiente de roce es la variable controlada.",
+    "hints": [
+      "¿Qué se mantiene igual en ambos casos del experimento? Las superficies en contacto, la caja y la superficie de cemento, son las mismas.",
+      "Recuerda la definición de coeficiente de roce. ¿De qué depende este coeficiente? ¿Cambia si se modifica la masa de las manzanas?",
+      "Analiza las opciones: la masa cambia, el peso cambia. Si el peso cambia, ¿qué pasa con la fuerza normal? Si la fuerza normal cambia, y el objeto se mueve a velocidad constante, ¿qué debe pasar con la fuerza aplicada y la fuerza de roce? ¿Cuál de estas es una consecuencia y cuál es una propiedad inherente de las superficies?"
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "11",
+    "internalId": "q-1760898169788-0.06541574746686607",
+    "id": "q-ai-cat-1760898169788-2-2"
+  },
+  {
+    "text": "Una persona revisa diversas fuentes bibliográficas, deteniendo su atención en la siguiente relación entre la magnitud física \n\\(M\\)\n de una placa tectónica en función del tiempo \n\\(t\\). A partir de la información anterior, la persona afirma que a medida que transcurre el tiempo la magnitud física \n\\(M\\)\n disminuye. ¿A qué componente de la investigación científica corresponde lo afirmado por la persona?",
+    "options": [
+      {
+        "text": "A una ley."
+      },
+      {
+        "text": "A una teoría."
+      },
+      {
+        "text": "A una variable."
+      },
+      {
+        "text": "A una inferencia."
+      }
+    ],
+    "correct": 3,
+    "explanation": "La afirmación 'a medida que transcurre el tiempo la magnitud física \n\\(M\\)\n disminuye' es una conclusión lógica o una deducción directa que se extrae al observar la tendencia de los datos presentados en el gráfico. Este acto de interpretar un patrón o relación a partir de la evidencia se conoce como inferencia. No es una ley (que describe el 'cómo' se comportan las cosas de manera general), ni una teoría (que explica el 'por qué'), ni una variable (que es un elemento individual que puede variar).",
+    "hints": [
+      "¿Qué es exactamente lo que la persona está haciendo al decir que 'a medida que transcurre el tiempo \n\\(M\\)\n disminuye'? ¿Está simplemente leyendo los datos o está explicando un fenómeno fundamental?",
+      "Diferencia entre una **observación** (ver los puntos del gráfico), una **inferencia** (describir la tendencia que muestran los puntos) y una **explicación** más profunda (una ley o teoría).",
+      "Una **inferencia** es una conclusión alcanzada sobre la base de la evidencia y el razonamiento. La persona está razonando sobre la tendencia mostrada en el gráfico."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "12",
+    "internalId": "q-1760898169788-0.17980761508158594",
+    "diagram": {
+      "type": "raster",
+      "src": "images/1760899033292-3ohs5qbi1b-Screenshot_20251019_153444.png",
+      "filename": "Screenshot_20251019_153444.png"
+    },
+    "id": "q-ai-cat-1760898169788-2-3"
+  },
+  {
+    "text": "Si un grupo de personas construye un circuito conectando dos resistencias en paralelo a una batería, ¿cuál de las siguientes opciones es coherente con la ley de Ohm y la configuración del circuito, al comparar la diferencia de potencial y la intensidad de corriente eléctrica en cada resistencia con la suministrada por la batería?",
+    "options": [
+      {
+        "text": "Diferencia de potencial: Es menor | Intensidad de corriente eléctrica: Es igual"
+      },
+      {
+        "text": "Diferencia de potencial: Es igual | Intensidad de corriente eléctrica: Es menor"
+      },
+      {
+        "text": "Diferencia de potencial: Es menor | Intensidad de corriente eléctrica: Es mayor"
+      },
+      {
+        "text": "Diferencia de potencial: Es igual | Intensidad de corriente eléctrica: Es mayor"
+      }
+    ],
+    "correct": 1,
+    "explanation": "En un circuito en paralelo, la diferencia de potencial (voltaje) entre los extremos de cada resistencia es la misma y es igual a la diferencia de potencial suministrada por la batería. Sin embargo, la corriente total de la batería se divide entre las resistencias. Por lo tanto, la intensidad de corriente que pasa por cada resistencia individual será menor que la intensidad de corriente total suministrada por la batería. Así, la opción B es la correcta.",
+    "hints": [
+      "¿Cuáles son las reglas fundamentales para la diferencia de potencial (voltaje) y la intensidad de corriente en un circuito en **paralelo**?",
+      "En un circuito en paralelo, los puntos de conexión de cada resistencia están directamente unidos a la fuente de voltaje. ¿Qué implica esto para el voltaje en cada resistencia en comparación con la batería?",
+      "La corriente 'sale' de la batería y luego tiene 'caminos' separados para llegar a cada resistencia. ¿Se divide o se mantiene igual la corriente total de la batería entre las resistencias individuales?"
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "13",
+    "internalId": "q-1760898169788-0.4341232374295928",
+    "id": "q-ai-cat-1760898169788-3-0"
+  },
+  {
+    "text": "Un estudiante construye un circuito eléctrico en serie. A continuación, cierra el circuito y comienza a registrar, cada cinco minutos durante media hora, el valor de la intensidad de corriente medida por el amperímetro. A partir del procedimiento realizado por el estudiante, ¿cuál de las siguientes preguntas de investigación guio el procedimiento descrito?",
+    "options": [
+      {
+        "text": "¿Qué relación existe entre la diferencia de potencial de la pila y la intensidad de corriente del circuito?"
+      },
+      {
+        "text": "¿Qué relación existe entre la diferencia de potencial de la pila y el tiempo de funcionamiento del circuito?"
+      },
+      {
+        "text": "¿Cómo se relaciona el funcionamiento del interruptor con la intensidad de corriente del circuito?"
+      },
+      {
+        "text": "¿Cómo se relaciona la intensidad de corriente con el tiempo de funcionamiento del circuito?"
+      }
+    ],
+    "correct": 3,
+    "explanation": "El procedimiento descrito implica medir la intensidad de corriente de un circuito a intervalos regulares de tiempo ('cada cinco minutos durante media hora'). Las variables principales que se están observando son la intensidad de corriente (la variable dependiente, lo que se mide) y el tiempo (la variable independiente, lo que transcurre). Por lo tanto, la pregunta de investigación que guía este procedimiento debe relacionar estas dos variables, lo cual se ajusta a la opción D.",
+    "hints": [
+      "Identifica la **variable que se está midiendo** en el experimento. ¿Qué instrumento se utiliza y qué magnitud registra?",
+      "Identifica la **variable que está cambiando o transcurriendo** de manera controlada en el experimento. ¿Cómo se organiza la toma de datos?",
+      "Una pregunta de investigación conecta directamente las variables que se miden y las que se manipulan o transcurren. ¿Qué variables están presentes en la opción D?"
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "14",
+    "internalId": "q-1760898169788-0.6216470034068172",
+    "id": "q-ai-cat-1760898169788-3-1"
+  },
+  {
+    "text": "Un foco industrial tiene un desperfecto en su resistencia eléctrica, por lo cual debe ser reemplazada. Si en la etiqueta del foco aparecen sus características, las cuales son \n\\(220 \\,\\text{V}\\)\n y \n\\(4 \\,\\text{A}\\)\n, ¿qué valor tiene la resistencia eléctrica a reemplazar?",
+    "options": [
+      {
+        "text": "4,0 \n\\(\\Omega\\)\n"
+      },
+      {
+        "text": "13,7 \n\\(\\Omega\\)\n"
+      },
+      {
+        "text": "55,0 \n\\(\\Omega\\)\n"
+      },
+      {
+        "text": "220,0 \n\\(\\Omega\\)\n"
+      }
+    ],
+    "correct": 2,
+    "explanation": "Para calcular el valor de la resistencia eléctrica, se utiliza la Ley de Ohm, que establece que \n\\(V = IR\\)\n, donde \n\\(V\\)\n es la diferencia de potencial (voltaje), \n\\(I\\)\n es la intensidad de corriente y \n\\(R\\)\n es la resistencia. Despejando \n\\(R\\)\n, obtenemos \n\\(R = V/I\\)\n. Sustituyendo los valores dados: \n\\(R = 220 \\,\\text{V} / 4 \\,\\text{A} = 55 \\,\\Omega\\)\n. Por lo tanto, la resistencia a reemplazar tiene un valor de \n\\(55,0 \\,\\Omega\\)\n.",
+    "hints": [
+      "¿Qué datos te proporciona el problema sobre el foco? Identifica el voltaje y la corriente.",
+      "¿Cuál es la ley fundamental que relaciona voltaje (\n\\(V\\)\n), corriente (\n\\(I\\)\n) y resistencia (\n\\(R\\)\n)?",
+      "Aplica la Ley de Ohm, \n\\(V = IR\\)\n, despejando la resistencia \n\\(R\\)\n y sustituyendo los valores numéricos."
+    ],
+    "sourceFileName": "Text Input",
+    "originalQuestionNumber": "15",
+    "internalId": "q-1760898169788-0.24454206412088741",
+    "id": "q-ai-cat-1760898169788-3-2"
+  }
+];
+        const categories = [
+  {
+    "id": "ai-cat-1760898169788-0",
+    "title": "Ondas Electromagnéticas y Óptica",
+    "description": "<p>Esta sección explora las propiedades y comportamientos de las ondas electromagnéticas, con un enfoque particular en la luz visible. Los conceptos clave incluyen:</p><ul><li><strong>Reflexión y Refracción:</strong> Fenómenos donde la luz cambia de dirección al chocar con una superficie o al pasar de un medio a otro. Recuerda que la <strong>frecuencia</strong> (que determina el color) de una onda de luz <em>no cambia</em> al reflejarse o refractarse. Lo que sí cambia son su <strong>velocidad</strong> (\n\\(v\\)\n) y su <strong>longitud de onda</strong> (\n\\(\\lambda\\)\n).</li><li><strong>Índice de Refracción (\n\\(n\\)\n):</strong> Es una medida de cuánto se reduce la velocidad de la luz en un medio en comparación con su velocidad en el vacío (\n\\(c\\)\n). Se define como \n\\(n = c/v\\)\n.</li><li><strong>Relaciones Fundamentales de Onda:</strong> La velocidad de una onda (\n\\(v\\)\n) se relaciona con su longitud de onda (\n\\(\\lambda\\)\n) y su frecuencia (\n\\(f\\)\n) mediante la ecuación \n\\(v = \\lambda f\\)\n. El período (\n\\(T\\)\n) es el inverso de la frecuencia: \n\\(T = 1/f\\)\n.</li><li><strong>Espectro Electromagnético:</strong> La luz se clasifica por su frecuencia (o longitud de onda). El color percibido de la luz visible está directamente relacionado con su frecuencia.</li><li><strong>Blindaje Electromagnético:</strong> Capacidad de un material para bloquear o atenuar la propagación de ondas electromagnéticas, protegiendo un área de la radiación externa.</li></ul>",
+    "summaryKey": "ai-cat-1760898169788-0",
+    "problem_ids": [
+      "q-ai-cat-1760898169788-0-0",
+      "q-ai-cat-1760898169788-0-1",
+      "q-ai-cat-1760898169788-0-2",
+      "q-ai-cat-1760898169788-0-3",
+      "q-ai-cat-1760898169788-0-4"
+    ]
+  },
+  {
+    "id": "ai-cat-1760898169788-1",
+    "title": "Dinámica y Fuerzas",
+    "description": "<p>Esta categoría se centra en las Leyes de Newton y los diferentes tipos de fuerzas que afectan el movimiento de los objetos.</p><ul><li><strong>Tercera Ley de Newton (Acción y Reacción):</strong> Establece que por cada acción, hay una reacción igual y opuesta. Cuando un cuerpo \n\\(A\\)\n ejerce una fuerza sobre un cuerpo \n\\(B\\)\n (\n\\(\\vec{F}_{AB}\\)\n), el cuerpo \n\\(B\\)\n ejerce una fuerza de igual magnitud y dirección opuesta sobre el cuerpo \n\\(A\\)\n (\n\\(\\vec{F}_{BA} = -\\vec{F}_{AB}\\)\n).</li><li><strong>Fuerza de Roce:</strong> Es una fuerza que se opone al movimiento relativo entre dos superficies en contacto.<ul><li><strong>Roce Estático (\n\\(f_s\\)\n):</strong> Actúa cuando el objeto está en reposo y se le aplica una fuerza. Es una fuerza variable que se ajusta para igualar la fuerza aplicada hasta un valor máximo (\n\\(f_{s,\\text{max}} = \\mu_s N\\)\n), donde \n\\(\\mu_s\\)\n es el coeficiente de roce estático y \n\\(N\\)\n es la fuerza normal.</li><li><strong>Roce Cinético (\n\\(f_k\\)\n):</strong> Actúa cuando el objeto está en movimiento. Su valor es aproximadamente constante y se calcula como \n\\(f_k = \\mu_k N\\)\n, donde \n\\(\\mu_k\\)\n es el coeficiente de roce cinético (\n\\(\\mu_k < \\mu_s\\)\n).</li></ul></li><li><strong>Fuerza Normal (\n\\(N\\)\n):</strong> Es la fuerza de contacto que una superficie ejerce sobre un objeto perpendicularmente a la superficie, oponiéndose al peso si la superficie es horizontal.</li></ul>",
+    "summaryKey": "ai-cat-1760898169788-1",
+    "problem_ids": [
+      "q-ai-cat-1760898169788-1-0",
+      "q-ai-cat-1760898169788-1-1"
+    ]
+  },
+  {
+    "id": "ai-cat-1760898169788-2",
+    "title": "Metodología Científica y Experimentación",
+    "description": "<p>Esta categoría aborda los principios fundamentales del método científico y el diseño experimental, esenciales para la investigación en cualquier disciplina.</p><ul><li><strong>Componentes de una Investigación Científica:</strong><ul><li><strong>Hipótesis:</strong> Una suposición o explicación tentativa que puede ser probada experimentalmente.</li><li><strong>Procedimiento:</strong> La serie de pasos detallados para llevar a cabo un experimento.</li><li><strong>Variables:</strong> Factores que pueden cambiar en un experimento.</li><ul><li><strong>Variable Independiente:</strong> La que el experimentador manipula o cambia.</li><li><strong>Variable Dependiente:</strong> La que se mide y se espera que cambie en respuesta a la variable independiente.</li><li><strong>Variable Controlada:</strong> Factores que se mantienen constantes para asegurar que solo la variable independiente afecte la dependiente.</li></ul><li><strong>Inferencia:</strong> Una conclusión lógica basada en la evidencia observada, a menudo una descripción de una tendencia o patrón en los datos.</li><li><strong>Conclusión:</strong> La interpretación final de los resultados del experimento, que confirma, refuta o modifica la hipótesis inicial y a menudo generaliza los hallazgos.</li><li><strong>Ley:</strong> Una descripción de un fenómeno observado en la naturaleza que siempre se cumple bajo ciertas condiciones, a menudo expresada matemáticamente (ej., \n\\(F=ma\\)\n).</li><li><strong>Teoría:</strong> Una explicación bien fundamentada de algún aspecto del mundo natural, basada en un cuerpo de hechos que han sido repetidamente confirmados a través de la observación y la experimentación.</li></ul></li><li><strong>Diseño Experimental:</strong> Debe ser capaz de probar una hipótesis controlando las variables para aislar el efecto de la variable independiente sobre la dependiente.</li></ul>",
+    "summaryKey": "ai-cat-1760898169788-2",
+    "problem_ids": [
+      "q-ai-cat-1760898169788-2-0",
+      "q-ai-cat-1760898169788-2-1",
+      "q-ai-cat-1760898169788-2-2",
+      "q-ai-cat-1760898169788-2-3"
+    ]
+  },
+  {
+    "id": "ai-cat-1760898169788-3",
+    "title": "Circuitos Eléctricos",
+    "description": "<p>Esta categoría explora los principios básicos de los circuitos eléctricos, incluyendo la Ley de Ohm y las características de las conexiones en serie y paralelo.</p><ul><li><strong>Ley de Ohm:</strong> Relaciona la diferencia de potencial (\n\\(V\\)\n, o voltaje), la intensidad de corriente eléctrica (\n\\(I\\)\n) y la resistencia eléctrica (\n\\(R\\)\n) en un circuito. La fórmula es \n\\(V = IR\\)\n.</li><li><strong>Circuitos en Paralelo:</strong> Una configuración donde los componentes están conectados a través de los mismos dos puntos, de modo que la diferencia de potencial (\n\\(V\\)\n) es la misma para todos los componentes. La corriente total (\n\\(I_{\\text{total}}\n\\)) se divide entre las ramas del circuito (\n\\(I_{\\text{total}} = I_1 + I_2 + ...\\)\n).</li><li><strong>Circuitos en Serie:</strong> Una configuración donde los componentes están conectados uno tras otro, de modo que la intensidad de corriente (\n\\(I\\)\n) es la misma a través de todos los componentes. La diferencia de potencial total (\n\\(V_{\\text{total}}\n\\)) es la suma de las diferencias de potencial en cada componente (\n\\(V_{\\text{total}} = V_1 + V_2 + ...\\)\n).</li><li><strong>Variables en la Investigación de Circuitos:</strong> La intensidad de corriente, el voltaje, la resistencia y el tiempo son variables comunes a medir o controlar en experimentos eléctricos.</li></ul>",
+    "summaryKey": "ai-cat-1760898169788-3",
+    "problem_ids": [
+      "q-ai-cat-1760898169788-3-0",
+      "q-ai-cat-1760898169788-3-1",
+      "q-ai-cat-1760898169788-3-2"
+    ]
+  }
+];
+
+        const problemsById = {};
+        allProblemsData.forEach(p => { problemsById[p.id] = p; });
+        
+        let currentQuizProblems = [];
+        let currentCategory = null;
+        let completedCategories = JSON.parse(localStorage.getItem('completedQuizCategories')) || {};
+        let currentProblemIndex = 0;
+        let score = 0;
+        
+        const categorySelectionScreen = document.getElementById('category-selection-screen');
+        const categoryListEl = document.getElementById('category-list');
+        const overallProgressContainer = document.getElementById('overall-progress-container');
+        const overallScoreEl = document.getElementById('overall-score');
+        const showFinalResultsBtn = document.getElementById('show-final-results-btn');
+        const quizWrapperEl = document.getElementById('quiz-wrapper');
+        const summaryContainerEl = document.getElementById('summary-container');
+        const summaryContinueBtn = document.getElementById('summary-continue-btn');
+        const quizContainerEl = document.getElementById('quiz-container');
+        const headerEl = document.getElementById('problem-header');
+        const questionEl = document.getElementById('question-container');
+        const graphEl = document.getElementById('graph-container');
+        const optionsEl = document.getElementById('options-container');
+        const hintsEl = document.getElementById('hints-container');
+        const feedbackEl = document.getElementById('feedback-container');
+        const nextButton = document.getElementById('next-button');
+        const progressBar = document.getElementById('progress-bar');
+        const scoreCounterEl = document.getElementById('score-counter');
+        const finalScreenEl = document.getElementById('final-screen');
+        const backToMenuBtn = document.getElementById('back-to-menu-btn');
+
+        function renderCategoryScreen() {
+            categoryListEl.innerHTML = '';
+            let totalCompleted = 0;
+            let totalPossibleScore = 0;
+            let totalUserScore = 0;
+
+            categories.forEach(cat => {
+                const li = document.createElement('li');
+                li.className = 'category-item';
+                li.dataset.categoryId = cat.id;
+                
+                const catProgress = completedCategories[cat.id];
+                let progressHTML = '';
+                if(catProgress) {
+                    li.classList.add('completed');
+                    if (catProgress.total > 0) {
+                        progressHTML = `<div class="progress-info">Completado: ${catProgress.score}/${catProgress.total}</div>`;
+                    }
+                    totalCompleted++;
+                    totalUserScore += catProgress.score;
+                    totalPossibleScore += cat.problem_ids.length;
+                }
+
+                li.innerHTML = `<h3>${cat.title}</h3><p>${cat.description.replace(/<[^>]*>?/gm, '').substring(0, 100)}...</p>${progressHTML}`;
+                li.onclick = () => {
+                    if (!li.classList.contains('completed')) {
+                        startCategory(cat.id);
+                    }
+                };
+                categoryListEl.appendChild(li);
+            });
+
+            if (Object.keys(completedCategories).length > 0) {
+                overallProgressContainer.classList.remove('hidden');
+                overallScoreEl.textContent = `Puntaje total: ${totalUserScore} de ${totalPossibleScore} correctas. Secciones completadas: ${totalCompleted} de ${categories.length}.`;
+            } else {
+                 overallProgressContainer.classList.add('hidden');
+            }
+
+            if (totalCompleted === categories.length && categories.length > 0) {
+                showFinalResultsBtn.classList.remove('hidden');
+            } else {
+                showFinalResultsBtn.classList.add('hidden');
+            }
+
+            quizWrapperEl.classList.add('hidden');
+            categorySelectionScreen.classList.remove('hidden');
+        }
+
+        function startCategory(categoryId) {
+            currentCategory = categories.find(c => c.id === categoryId);
+            if (!currentCategory) return;
+            
+            categorySelectionScreen.classList.add('hidden');
+            quizWrapperEl.classList.remove('hidden');
+
+            currentQuizProblems = currentCategory.problem_ids.map(id => problemsById[id]);
+            currentProblemIndex = 0;
+            score = 0;
+            
+            showSummary(currentCategory.id);
+        }
+
+        function showSummary(summaryKey) {
+            const summary = summaries[summaryKey];
+            if (!summary) {
+                 summaryContinueBtn.onclick(); return;
+            }
+            
+            const summaryTitleEl = document.getElementById('summary-title');
+            const keyConceptsEl = document.getElementById('summary-key-concepts');
+            const tipsListEl = document.getElementById('summary-tips-list');
+    
+            summaryTitleEl.textContent = `Preparación para: ${summary.title}`;
+            keyConceptsEl.innerHTML = summary.key_concepts_html;
+            
+            tipsListEl.innerHTML = '';
+            summary.tips.forEach(tip => {
+                const li = document.createElement('li');
+                li.textContent = tip;
+                tipsListEl.appendChild(li);
+            });
+            
+            renderMath();
+            quizContainerEl.classList.add('hidden');
+            finalScreenEl.classList.add('hidden');
+            summaryContainerEl.classList.remove('hidden');
+        }
+
+        summaryContinueBtn.onclick = () => {
+            summaryContainerEl.classList.add('hidden');
+            if (currentQuizProblems && currentQuizProblems.length > 0) {
+                quizContainerEl.classList.remove('hidden');
+                renderProblem(currentProblemIndex);
+            } else {
+                endOfCategory();
+            }
+        };
+        
+        function renderProblem(index) {
+            optionsEl.innerHTML = '';
+            hintsEl.innerHTML = '';
+            feedbackEl.style.display = 'none';
+            nextButton.classList.remove('visible');
+            graphEl.innerHTML = '';
+            optionsEl.className = '';
+
+            const problem = currentQuizProblems[index];
+            if (!problem) {
+                console.error("Could not find problem for index:", index, "in category:", currentCategory.title);
+                questionEl.innerHTML = "Error: No se pudo cargar la pregunta. Verifique que los datos sean correctos.";
+                return;
+            }
+
+            headerEl.textContent = `Pregunta ${index + 1} de ${currentQuizProblems.length}`;
+            questionEl.innerHTML = problem.text;
+            progressBar.style.width = `${((index) / currentQuizProblems.length) * 100}%`;
+            scoreCounterEl.textContent = `✅ Puntos: ${score}`;
+            
+            if (problem.diagram) {
+                graphEl.style.display = 'block';
+                graphEl.innerHTML = renderDiagram(problem.diagram);
+            } else {
+                graphEl.style.display = 'none';
+            }
+            
+            const optionsHaveDiagrams = problem.options.some(opt => opt.diagram);
+
+            if (optionsHaveDiagrams) {
+                 optionsEl.className = 'options-grid-with-graphs';
+                 problem.options.forEach((opt, i) => createOptionBlock(opt, i));
+            } else {
+                 problem.options.forEach((opt, i) => createOptionButton(opt, i));
+            }
+
+            if (problem.hints && problem.hints.length > 0) {
+                problem.hints.forEach((hint, i) => {
+                    const button = document.createElement('button');
+                    button.className = 'hint-button';
+                    button.textContent = `💡 Revelar Pista ${i + 1}`;
+                    button.dataset.hintIndex = i;
+                    if (i > 0) {
+                        button.disabled = true;
+                    }
+                    button.onclick = (e) => {
+                        const clickedButton = e.currentTarget;
+                        const hintContent = document.createElement('div');
+                        hintContent.className = 'hint-content';
+                        hintContent.innerHTML = hint;
+                        clickedButton.replaceWith(hintContent);
+                        
+                        const nextHintButton = hintsEl.querySelector('.hint-button');
+                        if (nextHintButton) {
+                            nextHintButton.disabled = false;
+                        }
+                        renderMath();
+                    };
+                    hintsEl.appendChild(button);
+                });
+            }
+
+            renderMath();
+        }
+        
+        function createOptionButton(option, index) {
+            const button = document.createElement('button');
+            button.className = 'option-button';
+            button.dataset.index = index;
+            button.innerHTML = `<span class="label">${String.fromCharCode(65 + index)})</span> <span class="value">${option.text || ''}</span>`;
+            button.onclick = handleOptionClick;
+            optionsEl.appendChild(button);
+        }
+        
+        function createOptionBlock(option, index) {
+            const optionBlock = document.createElement('div');
+            optionBlock.className = 'option-block-graph';
+            optionBlock.dataset.index = index;
+            optionBlock.onclick = handleOptionClick;
+            let diagramHTML = option.diagram ? `<div class="option-graph-canvas-container">${renderDiagram(option.diagram)}</div>` : '';
+            optionBlock.innerHTML = `<div class="label">${String.fromCharCode(65 + index)}) ${option.text || ''}</div> ${diagramHTML}`;
+            optionsEl.appendChild(optionBlock);
+        }
+
+        function handleOptionClick(event) {
+            const problem = currentQuizProblems[currentProblemIndex];
+            const selectedIndex = parseInt(event.currentTarget.dataset.index, 10);
+            const correctIndex = problem.correct;
+            
+            const correctButton = document.querySelector(`[data-index="${correctIndex}"]`);
+            if (correctButton) correctButton.classList.add('correct');
+            
+            let isAnswerCorrect = false;
+            const selectedButton = event.currentTarget;
+            if (selectedIndex === correctIndex) {
+                score++;
+                isAnswerCorrect = true;
+            } else {
+                selectedButton.classList.add('incorrect');
+            }
+            
+            scoreCounterEl.textContent = `✅ Puntos: ${score}`;
+            document.querySelectorAll('.option-button, .option-block-graph').forEach(btn => { btn.classList.add('disabled'); btn.onclick = null; });
+            progressBar.style.width = `${((currentProblemIndex + 1) / currentQuizProblems.length) * 100}%`;
+            
+            feedbackEl.className = isAnswerCorrect ? 'feedback-container correct' : 'feedback-container incorrect';
+            const feedbackTitle = isAnswerCorrect ? `<div id="feedback-title">${icons.check} Correcto</div>` : `<div id="feedback-title">${icons.x} Incorrecto</div>`;
+            feedbackEl.innerHTML = `${feedbackTitle}${problem.explanation}`;
+            
+            renderMath();
+            feedbackEl.style.display = 'block';
+            if (currentProblemIndex < currentQuizProblems.length - 1) { nextButton.textContent = 'Siguiente →'; } 
+            else { nextButton.textContent = 'Finalizar Sección'; }
+            nextButton.classList.add('visible');
+        }
+
+        nextButton.onclick = () => {
+            currentProblemIndex++;
+            if (currentProblemIndex < currentQuizProblems.length) {
+                renderProblem(currentProblemIndex);
+            } else {
+                endOfCategory();
+            }
+        };
+        
+        function endOfCategory() {
+            completedCategories[currentCategory.id] = {
+                score: score,
+                total: currentQuizProblems.length
+            };
+            localStorage.setItem('completedQuizCategories', JSON.stringify(completedCategories));
+            
+            quizContainerEl.classList.add('hidden');
+            finalScreenEl.classList.remove('hidden');
+
+            const percentage = currentQuizProblems.length > 0 ? Math.round((score / currentQuizProblems.length) * 100) : 100;
+            document.getElementById('final-title').textContent = `Sección Completada: ${currentCategory.title}`;
+            document.getElementById('final-message').textContent = currentQuizProblems.length > 0 ? `¡Gran trabajo! Has completado esta sección.` : `¡Concepto explorado! Ahora puedes continuar con la siguiente sección.`;
+            document.getElementById('final-score').textContent = currentQuizProblems.length > 0 ? `${score} / ${currentQuizProblems.length}` : '✔';
+            const finalPercentageEl = document.getElementById('final-percentage');
+            if (currentQuizProblems.length > 0) {
+                finalPercentageEl.textContent = `(${percentage}%)`;
+                finalPercentageEl.style.color = percentage >= 60 ? 'var(--success-color)' : 'var(--danger-color)';
+            } else {
+                finalPercentageEl.textContent = '';
+            }
+            backToMenuBtn.textContent = 'Volver al Menú';
+            backToMenuBtn.onclick = () => {
+                finalScreenEl.classList.add('hidden');
+                renderCategoryScreen();
+            };
+        }
+        
+        showFinalResultsBtn.onclick = () => {
+            categorySelectionScreen.classList.add('hidden');
+            quizWrapperEl.classList.remove('hidden');
+
+            summaryContainerEl.classList.add('hidden');
+            quizContainerEl.classList.add('hidden');
+            finalScreenEl.classList.remove('hidden');
+
+            let totalScore = 0;
+            let totalProblems = 0;
+            Object.values(completedCategories).forEach(cat => {
+                totalScore += cat.score;
+                if (cat.total > 0) {
+                    totalProblems += cat.total;
+                }
+            });
+
+            const percentage = totalProblems > 0 ? Math.round((totalScore / totalProblems) * 100) : 0;
+            document.getElementById('final-title').textContent = '¡Resumen Final del Desafío!';
+            document.getElementById('final-message').textContent = '¡Felicidades! Has completado todos los temas. Este es tu rendimiento general.';
+            document.getElementById('final-score').textContent = `${totalScore} / ${totalProblems}`;
+            const finalPercentageEl = document.getElementById('final-percentage');
+            finalPercentageEl.textContent = `(${percentage}%)`;
+            finalPercentageEl.style.color = percentage >= 60 ? 'var(--success-color)' : 'var(--danger-color)';
+            
+            backToMenuBtn.textContent = 'Reiniciar Desafío';
+            backToMenuBtn.onclick = () => {
+                localStorage.removeItem('completedQuizCategories');
+                window.location.reload();
+            };
+        };
+        
+        renderCategoryScreen();
+        renderMath();
+    });
+    </script>
+</body>
+</html>
+  
